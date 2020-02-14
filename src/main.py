@@ -90,7 +90,7 @@ def validate(model, loader):
 
 
 def infer(model, fnImg):
-	#recognize text in image provided by file path
+	"recognize text in image provided by file path"
 	img = preprocess(cv2.imread(fnImg, cv2.IMREAD_GRAYSCALE), Model.imgSize)
 	batch = Batch(None, [img])
 	(recognized, probability) = model.inferBatch(batch, True)
@@ -99,7 +99,7 @@ def infer(model, fnImg):
 
 
 def main():
-  #main function
+	"main function"
 	# optional command line args
 	parser = argparse.ArgumentParser()
 	parser.add_argument('--train', help='train the NN', action='store_true')
@@ -117,21 +117,22 @@ def main():
 		decoderType = DecoderType.WordBeamSearch
 
 	# train or validate on IAM dataset
-  # load training data, create TF model
 	if args.train or args.validate:
-    #pdb.set_trace()
-    loader = DataLoader(FilePaths.fnTrain, Model.batchSize, Model.imgSize, Model.maxTextLen)
+		# load training data, create TF model
+    pdb.set_trace()
+		loader = DataLoader(FilePaths.fnTrain, Model.batchSize, Model.imgSize, Model.maxTextLen)
+
 		# save characters of model for inference mode
-    open(FilePaths.fnCharList, 'w').write(str().join(loader.charList))
+		open(FilePaths.fnCharList, 'w').write(str().join(loader.charList))
 
 		# save words contained in dataset into file
-    open(FilePaths.fnCorpus, 'w').write(str(' ').join(loader.trainWords + loader.validationWords))
+		open(FilePaths.fnCorpus, 'w').write(str(' ').join(loader.trainWords + loader.validationWords))
 
 		# execute training or validation
-    if args.train:
+		if args.train:
 			model = Model(loader.charList, decoderType)
 			train(model, loader)
-    elif args.validate:
+		elif args.validate:
 			model = Model(loader.charList, decoderType, mustRestore=True)
 			validate(model, loader)
 
