@@ -120,18 +120,18 @@ def main():
 	if args.train or args.validate:
     import pdb
     pdb.set_trace()
-		loader = DataLoader(FilePaths.fnTrain, Model.batchSize, Model.imgSize, Model.maxTextLen)
+    loader = DataLoader(FilePaths.fnTrain, Model.batchSize, Model.imgSize, Model.maxTextLen)
 		# save characters of model for inference mode
-		open(FilePaths.fnCharList, 'w').write(str().join(loader.charList))
+    open(FilePaths.fnCharList, 'w').write(str().join(loader.charList))
 
 		# save words contained in dataset into file
-		open(FilePaths.fnCorpus, 'w').write(str(' ').join(loader.trainWords + loader.validationWords))
+    open(FilePaths.fnCorpus, 'w').write(str(' ').join(loader.trainWords + loader.validationWords))
 
 		# execute training or validation
-		if args.train:
+    if args.train:
 			model = Model(loader.charList, decoderType)
 			train(model, loader)
-		elif args.validate:
+    elif args.validate:
 			model = Model(loader.charList, decoderType, mustRestore=True)
 			validate(model, loader)
 
