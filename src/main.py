@@ -121,7 +121,6 @@ def main():
     import pdb
     pdb.set_trace()
 		loader = DataLoader(FilePaths.fnTrain, Model.batchSize, Model.imgSize, Model.maxTextLen)
-
 		# save characters of model for inference mode
 		open(FilePaths.fnCharList, 'w').write(str().join(loader.charList))
 
