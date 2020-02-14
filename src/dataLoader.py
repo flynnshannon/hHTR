@@ -113,22 +113,3 @@ class DataLoader:
     imgs = [preprocess(cv2.imread(self.samples[i].filepath, cv2.IMREAD_GRAYSCALE), self.imgSize, self.dataAugmentation) for i in batchRange]
     self.currIdx += self.batchSize
     return Batch(gtTexts, imgs)
-
-
-
-''''
-what is this????
-
-img = cv2.imread('in.png', cv2.IMREAD_GRAYSCALE)
-
-#increase contrast
-pxmin = np.min(img)
-pxmax = np.max(img)
-contrast = (img - pxmin)/(pxmax - pxmin) *255
-
-#increase line width
-kernel = np.ones((3,3), np.uint8)
-imgMorph = cv2.erode(contrast, kernel, iterations = 1)
-
-#write
-cv2.imwrite('out.png', imgMorph)''''
