@@ -118,7 +118,8 @@ def main():
 	# train or validate on IAM dataset
 	if args.train or args.validate:
 		# load training data, create TF model
-    import pdb; pdb.set_trace()
+    import pdb
+    pdb.set_trace()
 		loader = DataLoader(FilePaths.fnTrain, Model.batchSize, Model.imgSize, Model.maxTextLen)
 
 		# save characters of model for inference mode
