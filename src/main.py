@@ -116,8 +116,8 @@ def main():
 		decoderType = DecoderType.WordBeamSearch
 
 	# train or validate on IAM dataset
+  # load training data, create TF model
 	if args.train or args.validate:
-		# load training data, create TF model
     import pdb
     pdb.set_trace()
 		loader = DataLoader(FilePaths.fnTrain, Model.batchSize, Model.imgSize, Model.maxTextLen)
