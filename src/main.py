@@ -5,7 +5,6 @@ import sys
 import argparse
 import cv2
 import editdistance
-import pdb
 from DataLoader import DataLoader, Batch
 from Model import Model, DecoderType
 from SamplePreprocessor import preprocess
@@ -115,10 +114,11 @@ def main():
 		decoderType = DecoderType.BeamSearch
 	elif args.wordbeamsearch:
 		decoderType = DecoderType.WordBeamSearch
+
 	# train or validate on IAM dataset
 	if args.train or args.validate:
-    # load training data, create TF model
-    loader = DataLoader(FilePaths.fnTrain, Model.batchSize, Model.imgSize, Model.maxTextLen)
+		# load training data, create TF model
+		loader = DataLoader(FilePaths.fnTrain, Model.batchSize, Model.imgSize, Model.maxTextLen)
 
 		# save characters of model for inference mode
 		open(FilePaths.fnCharList, 'w').write(str().join(loader.charList))
