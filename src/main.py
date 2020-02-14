@@ -5,6 +5,7 @@ import sys
 import argparse
 import cv2
 import editdistance
+import pdb
 from DataLoader import DataLoader, Batch
 from Model import Model, DecoderType
 from SamplePreprocessor import preprocess
@@ -118,7 +119,6 @@ def main():
 	# train or validate on IAM dataset
   # load training data, create TF model
 	if args.train or args.validate:
-    import pdb
     pdb.set_trace()
     loader = DataLoader(FilePaths.fnTrain, Model.batchSize, Model.imgSize, Model.maxTextLen)
 		# save characters of model for inference mode
