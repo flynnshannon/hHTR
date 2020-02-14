@@ -115,7 +115,6 @@ def main():
 		decoderType = DecoderType.BeamSearch
 	elif args.wordbeamsearch:
 		decoderType = DecoderType.WordBeamSearch
-  pdb.set_trace()
 	# train or validate on IAM dataset
 	if args.train or args.validate:
     # load training data, create TF model
