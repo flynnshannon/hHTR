@@ -47,9 +47,9 @@ class Model:
 		# setup optimizer to train NN
 		self.batchesTrained = 0
 		self.learningRate = tf0.placeholder(tf.float32, shape=[])
-		self.update_ops = tf.get_collection(tf.GraphKeys.UPDATE_OPS)
+		self.update_ops = tf0.get_collection(tf0.GraphKeys.UPDATE_OPS)
 		with tf.control_dependencies(self.update_ops):
-			self.optimizer = tf.train.RMSPropOptimizer(self.learningRate).minimize(self.loss)
+			self.optimizer = tf0.train.RMSPropOptimizer(self.learningRate).minimize(self.loss)
 
 		# initialize TF
 		(self.sess, self.saver) = self.setupTF()
@@ -85,14 +85,16 @@ class Model:
 
 		# basic cells which is used to build RNN
 		numHidden = 256
-		cells = [tf.contrib.rnn.LSTMCell(num_units=numHidden, state_is_tuple=True) for _ in range(2)] # 2 layers
+		#this could be wrong
+		cells = [tf.compat.v1.nn.rnn_cell.LSTMCell(num_units=numHidden, state_is_tuple=True) for _ in range(2)] # 2 layers
 
 		# stack basic cells
-		stacked = tf.contrib.rnn.MultiRNNCell(cells, state_is_tuple=True)
+		#this is the compat
+		stacked = tf.compat.v1.nn.rnn_cell.MultiRNNCell(cells, state_is_tuple=True)
 
 		# bidirectional RNN
 		# BxTxF -> BxTx2H
-		((fw, bw), _) = tf.nn.bidirectional_dynamic_rnn(cell_fw=stacked, cell_bw=stacked, inputs=rnnIn3d, dtype=rnnIn3d.dtype)
+		((fw, bw), _) = tf.compat.v1.nn.bidirectional_dynamic_rnn(cell_fw=stacked, cell_bw=stacked, inputs=rnnIn3d, dtype=rnnIn3d.dtype)
 
 		# BxTxH + BxTxH -> BxTx2H -> BxTx1X2H
 		concat = tf.expand_dims(tf.concat([fw, bw], 2), 2)
@@ -108,15 +110,15 @@ class Model:
 		# BxTxC -> TxBxC
 		self.ctcIn3dTBC = tf.transpose(self.rnnOut3d, [1, 0, 2])
 		# ground truth text as sparse tensor
-		self.gtTexts = tf.SparseTensor(tf0.placeholder(tf.int64, shape=[None, 2]) , tf.placeholder(tf.int32, [None]), tf.placeholder(tf.int64, [2]))
+		self.gtTexts = tf.SparseTensor(tf0.placeholder(tf.int64, shape=[None, 2]) , tf0.placeholder(tf.int32, [None]), tf0.placeholder(tf.int64, [2]))
 
 		# calc loss for batch
 		self.seqLen = tf0.placeholder(tf.int32, [None])
-		self.loss = tf.reduce_mean(tf.nn.ctc_loss(labels=self.gtTexts, inputs=self.ctcIn3dTBC, sequence_length=self.seqLen, ctc_merge_repeated=True))
+		self.loss = tf.reduce_mean(tf0.nn.ctc_loss(labels=self.gtTexts, inputs=self.ctcIn3dTBC, sequence_length=self.seqLen, ctc_merge_repeated=True))
 
 		# calc loss for each element to compute label probability
 		self.savedCtcInput = tf0.placeholder(tf.float32, shape=[Model.maxTextLen, None, len(self.charList) + 1])
-		self.lossPerElement = tf.nn.ctc_loss(labels=self.gtTexts, inputs=self.savedCtcInput, sequence_length=self.seqLen, ctc_merge_repeated=True)
+		self.lossPerElement = tf0.nn.ctc_loss(labels=self.gtTexts, inputs=self.savedCtcInput, sequence_length=self.seqLen, ctc_merge_repeated=True)
 
 		# decoder: either best path decoding or beam search decoding
 		if self.decoderType == DecoderType.BestPath:
@@ -141,9 +143,9 @@ class Model:
 		print('Python: '+sys.version)
 		print('Tensorflow: '+tf.__version__)
 
-		sess=tf.Session() # TF session
+		sess=tf0.Session() # TF session
 
-		saver = tf.train.Saver(max_to_keep=1) # saver saves model to file
+		saver = tf0.train.Saver(max_to_keep=1) # saver saves model to file
 		modelDir = '../model/'
 		latestSnapshot = tf.train.latest_checkpoint(modelDir) # is there a saved model?
 
@@ -157,7 +159,7 @@ class Model:
 			saver.restore(sess, latestSnapshot)
 		else:
 			print('Init with new values')
-			sess.run(tf.global_variables_initializer())
+			sess.run(tf0.global_variables_initializer())
 
 		return (sess,saver)
 
