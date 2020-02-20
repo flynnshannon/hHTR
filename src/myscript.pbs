@@ -1,0 +1,7 @@
+#PBS -l walltime=24:00:00
+#PBS -l nodes=1:ppn=6:gpus=1
+#PBS -N hHTR_training
+#PBS -m abe
+
+set -x
+python3 main.py --train
